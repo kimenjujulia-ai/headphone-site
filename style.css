@@ -1,0 +1,840 @@
+/* =========================================================
+   BASE
+   ========================================================= */
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background-color: #111;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+img {
+  max-width: 100%;
+  width: 400px;
+}
+
+/* so nav links land below the sticky nav */
+section[id] { scroll-margin-top: 64px; }
+
+/* =========================================================
+   SPLASH (colour sweep)
+   ========================================================= */
+.fw {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+}
+
+.fw-panel {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+.fw-panel:nth-child(1) { background: #c04912; }
+.fw-panel:nth-child(2) { background: #78818a; }
+.fw-panel:nth-child(3) { background: #9f1019; }
+.fw-panel:nth-child(4) { background: #0b5a2e; }
+
+.fw-word {
+  font-family: "Anton", Impact, sans-serif;
+  font-size: clamp(32px, 7vw, 80px);
+  color: #fff;
+  letter-spacing: 0.03em;
+}
+
+/* hide the page while the splash plays */
+.fw-lock > section,
+.fw-lock > header { visibility: hidden; }
+body.fw-lock { overflow: hidden; }
+
+/* exit: green leaves first, orange last */
+@keyframes fw-out {
+  from { transform: translateX(0); }
+  to   { transform: translateX(100%); }
+}
+.fw-go .fw-panel:nth-child(4) { animation: fw-out 0.6s ease-in 0s    both; }
+.fw-go .fw-panel:nth-child(3) { animation: fw-out 0.6s ease-in 0.15s both; }
+.fw-go .fw-panel:nth-child(2) { animation: fw-out 0.6s ease-in 0.3s  both; }
+.fw-go .fw-panel:nth-child(1) { animation: fw-out 0.6s ease-in 0.45s both; }
+
+/* headphone pop as the page opens */
+@keyframes hero-pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+.hero-pop .photo img {
+  animation: hero-pop 0.9s ease-in-out 0.7s;
+}
+
+/* =========================================================
+   NAV
+   ========================================================= */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  box-sizing: border-box;
+  padding: 0 clamp(16px, 4vw, 48px);
+  background: rgba(17, 17, 17, 0.85);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.nav-logo {
+  font-family: "Anton", Impact, sans-serif;
+  font-size: 26px;
+  letter-spacing: 0.08em;
+  color: #fff;
+  text-decoration: none;
+}
+
+.nav nav {
+  display: flex;
+  gap: clamp(16px, 3vw, 36px);
+}
+
+.nav nav a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 15px;
+  opacity: 0.8;
+  padding: 6px 0;
+  border-bottom: 2px solid transparent;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+
+.nav nav a:hover,
+.nav nav a:focus-visible {
+  opacity: 1;
+  border-color: #d89a6a;
+  outline: none;
+}
+
+/* =========================================================
+   HERO (compact: fits one screen)
+   ========================================================= */
+.hero {
+  --accent: #d89a6a;
+  --band: rgba(20, 110, 110, 0.35);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  min-height: calc(100vh - 64px);
+  padding: 24px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #000 0%, #04191b 55%, #0a3a3d 100%);
+}
+
+/* teal band down the middle */
+.band {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(70px, 11vw, 160px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--band);
+}
+
+.band span {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: clamp(60px, 10vw, 140px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.25);
+}
+
+/* vertical title on the left (wide screens only, see bottom) */
+.side-title {
+  display: none;
+  position: absolute;
+  z-index: 0;
+  left: clamp(8px, 2.5vw, 40px);
+  top: 50%;
+  transform: translateY(-50%) rotate(180deg);
+  writing-mode: vertical-rl;
+  font-family: "Anton", Impact, sans-serif;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+.side-title b {
+  display: block;
+  margin-block-end: 12px;
+  font-weight: 400;
+  font-size: clamp(34px, 4.5vw, 64px);
+  letter-spacing: 0.04em;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.5);
+}
+
+.side-title span {
+  display: block;
+  font-weight: 400;
+  font-size: clamp(14px, 1.6vw, 22px);
+  letter-spacing: 0.35em;
+  color: #fff;
+  opacity: 0.85;
+}
+
+/* heading */
+.hero h1 {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  line-height: 0.95;
+}
+
+.h1-top {
+  display: block;
+  font-family: "Anton", Impact, sans-serif;
+  font-weight: 400;
+  font-size: clamp(26px, 4.2vw, 56px);
+  letter-spacing: 0.02em;
+}
+
+.h1-script {
+  display: block;
+  font-family: "Yellowtail", cursive;
+  font-weight: 400;
+  font-size: clamp(24px, 3.6vw, 44px);
+  color: var(--accent);
+  margin-top: -0.1em;
+  transform: rotate(-4deg);
+}
+
+/* Explore button */
+.explore {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  margin-top: 16px;
+  padding: 12px 32px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #111;
+  font-weight: bold;
+  text-decoration: none;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.explore:hover,
+.explore:focus-visible {
+  background: #fff;
+  transform: translateY(-2px);
+  outline: none;
+}
+
+/* Black Friday glass card */
+.deal {
+  position: absolute;
+  z-index: 3;
+  right: clamp(16px, 3vw, 48px);
+  bottom: 110px;
+  width: 210px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px;
+  border-radius: 20px;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px rgba(0, 242, 254, 0.2),
+              inset 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.deal b {
+  font-family: "Anton", Impact, sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+  letter-spacing: 0.04em;
+}
+
+.deal span { font-size: 14px; opacity: 0.85; }
+
+.deal a {
+  align-self: flex-start;
+  margin-top: 6px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  background: #fff;
+  color: #111;
+  font-size: 13px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+/* hero headphone */
+.photo {
+  position: relative;
+  width: min(520px, 90%);
+  margin: 16px auto;
+  touch-action: pan-y;
+}
+
+.photo img {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 52vh;          /* never more than 38% of the screen height */
+  margin: 0 auto;
+  filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.45));
+}
+
+/* specs row */
+@media (min-width: 1100px) {
+  .side-title { display: block; }
+
+  .specs {
+    position: absolute;
+    left: clamp(200px, 14vw, 300px);
+    top: 50%;
+    transform: translateY(-50%);
+    width: auto;
+    flex-direction: column;
+    gap: 22px;
+    text-align: left;
+  }
+
+  .specs div,
+  .specs div:first-child {
+    flex: none;
+    padding: 4px 0 4px 16px;
+    border-left: 3px solid var(--accent);
+  }
+}
+.specs b {
+  display: block;
+  font-family: "Anton", Impact, sans-serif;
+  font-weight: 400;
+  font-size: 22px;
+  letter-spacing: 0.03em;
+}
+
+.specs span { opacity: 0.75; font-size: 14px; }
+
+/* =========================================================
+   MUSIC PLAYER CARD (hidden to keep the hero clean)
+   To bring it back, delete the display: none line.
+   ========================================================= */
+.player {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  top: 24%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 160%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px 28px;
+  border-radius: 22px;
+  color: #fff;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+.player-song { display: flex; align-items: center; gap: 16px; }
+.player-song b { display: block; font-size: 18px; }
+.player-song span { font-size: 14px; opacity: 0.8; }
+
+.player-controls {
+  width: 230px;
+  padding: 14px 20px;
+  border-radius: 14px;
+  background: rgba(6, 26, 61, 0.75);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bars { display: flex; align-items: center; gap: 4px; height: 36px; }
+
+.bars i {
+  width: 4px;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--accent);
+  animation: beat 1s ease-in-out infinite;
+}
+.bars i:nth-child(2) { animation-delay: 0.15s; }
+.bars i:nth-child(3) { animation-delay: 0.3s; }
+.bars i:nth-child(4) { animation-delay: 0.45s; }
+.bars i:nth-child(5) { animation-delay: 0.6s; }
+.bars i:nth-child(6) { animation-delay: 0.75s; }
+
+@keyframes beat {
+  0%, 100% { transform: scaleY(0.25); }
+  50%      { transform: scaleY(1); }
+}
+
+.progress {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+}
+
+.progress span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  animation: fill 30s linear infinite;
+}
+
+@keyframes fill { to { width: 100%; } }
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+}
+
+.controls button {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.controls #play { background: #fff; color: #061a3d; }
+
+.controls button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.photo.paused .bars i,
+.photo.paused .progress span { animation-play-state: paused; }
+
+/* =========================================================
+   PRODUCTS (colour switcher)
+   ========================================================= */
+.products {
+  padding: 48px 20px 44px;
+  background-color: #1c1c1c;
+  transition: background-color 0.8s ease;
+}
+
+.showcase {
+  max-width: 520px;
+  margin: 16px auto 0;
+}
+
+.stage {
+  position: relative;
+  width: min(340px, 80%);
+  margin: 0 auto 10px;
+}
+
+/* light circle so a headphone never blends into a same-colour background */
+.stage::before {
+  content: "";
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.stage img {
+  position: relative;
+  width: 100%;
+  filter: drop-shadow(0 25px 30px rgba(0, 0, 0, 0.4));
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s;
+}
+
+.stage img.out {
+  opacity: 0;
+  transform: rotate(-25deg) scale(0.7);
+}
+
+.showcase h3 {
+  font-family: "Anton", Impact, sans-serif;
+  font-weight: 400;
+  font-size: clamp(32px, 5vw, 48px);
+  letter-spacing: 0.03em;
+  margin: 10px 0 4px;
+}
+
+.price { color: #fff; font-weight: bold; }
+
+.buy {
+  display: inline-block;
+  background: #fff;
+  color: #111;
+  padding: 12px 24px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* =========================================================
+   FEATURES
+   ========================================================= */
+/* ---------- Features (bento cards) ---------- */
+.features {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 56px 20px;
+}
+
+.bento {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 32px;
+}
+
+.feature {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  text-align: left;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.feature:hover {
+  transform: translateY(-6px);
+  border-color: #d89a6a;
+  box-shadow: 0 16px 40px rgba(216, 154, 106, 0.18);
+}
+
+.feature img {
+  display: block;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+
+.feature:hover img { transform: scale(1.06); }
+
+/* first card: full width, image on the left */
+.feature-wide {
+  grid-column: 1 / -1;
+  flex-direction: row;
+}
+
+.feature-wide img {
+  width: 48%;
+  height: 260px;
+}
+
+.feature-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 22px 24px 26px;
+}
+
+.feature-num {
+  font-family: "Anton", Impact, sans-serif;
+  font-size: 44px;
+  line-height: 1;
+  margin-bottom: 8px;
+  color: transparent;
+  -webkit-text-stroke: 1.5px #d89a6a;
+}
+
+.feature-text h3 { margin: 0 0 8px; font-size: 22px; }
+
+.feature-text p {
+  margin: 0;
+  color: #bbb;
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+/* scroll reveal (JavaScript adds .reveal, then .in) */
+.feature.reveal:not(.in) { opacity: 0; }
+.feature.in { animation: rise 0.7s ease backwards; }
+.feature.in:nth-child(2) { animation-delay: 0.12s; }
+.feature.in:nth-child(3) { animation-delay: 0.24s; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(30px); }
+}
+
+@media (max-width: 700px) {
+  .bento { grid-template-columns: 1fr; }
+  .feature-wide { flex-direction: column; }
+  .feature-wide img { width: 100%; height: 200px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feature.in { animation: none; }
+  .feature, .feature img { transition: none; }
+}
+
+/* ---------- Color swatches ---------- */
+.swatches {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+/* hide the real radio circle, but keep it usable with the keyboard */
+.swatches input {
+  position: absolute;
+  opacity: 0;
+}
+
+/* the colored circle we draw ourselves */
+.swatches span {
+  display: block;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--c);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+/* the selected one gets a white ring */
+.swatches input:checked + span {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+  transform: scale(1.1);
+}
+
+/* keyboard users can see where they are */
+.swatches input:focus-visible + span {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+
+
+/* ---------- Section heading (matches the hero) ---------- */
+.section-title {
+  margin: 0 0 12px;
+  line-height: 0.95;
+}
+
+.st-top {
+  display: block;
+  font-family: "Anton", Impact, sans-serif;
+  font-weight: 400;
+  font-size: clamp(30px, 5vw, 52px);
+  letter-spacing: 0.04em;
+}
+
+.st-script {
+  display: block;
+  font-family: "Yellowtail", cursive;
+  font-weight: 400;
+  font-size: clamp(30px, 4.5vw, 46px);
+  color: #ffd23f;
+  margin-top: -0.1em;
+  transform: rotate(-4deg);
+}
+
+/* ---------- Discount badge ---------- */
+.badge {
+  position: absolute;
+  z-index: 3;
+  top: 4%;
+  right: 2%;
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: #ffd23f;
+  color: #111;
+  font-family: "Anton", Impact, sans-serif;
+  font-size: 24px;
+  letter-spacing: 0.02em;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  transform: rotate(12deg);
+  animation: badge-pulse 2s ease-in-out infinite;
+}
+
+@keyframes badge-pulse {
+  0%, 100% { transform: rotate(12deg) scale(1); }
+  50%      { transform: rotate(12deg) scale(1.1); }
+}
+
+/* ---------- Sale price ---------- */
+.price {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin: 6px 0 14px;
+}
+
+.price s {
+  font-size: 16px;
+  opacity: 0.65;
+}
+
+.price strong {
+  font-family: "Anton", Impact, sans-serif;
+  font-weight: 400;
+  font-size: 34px;
+  letter-spacing: 0.03em;
+  color: #ffd23f;
+}
+
+.price small {
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .badge { animation: none; }
+}
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .bars i,
+  .progress span { animation: none; }
+  .products,
+  .stage img,
+  .explore { transition: none; }
+}
+
+/* =========================================================
+   RESPONSIVE (keep these LAST)
+   ========================================================= */
+@media (max-width: 900px) {
+  /* card sits under the headphone instead of floating over it */
+  .deal {
+    position: static;
+    width: min(320px, 100%);
+    margin-top: 16px;
+  }
+}
+
+@media (max-width: 700px) {
+  .feature,
+  .feature:nth-of-type(even) { flex-direction: column; }
+  .feature img { width: 100%; }
+  .nav-logo { font-size: 22px; }
+  .nav nav a { font-size: 14px; }
+}
+
+@media (min-width: 1100px) {
+  .side-title { display: block; }
+}
+
+/* ---------- Goodbye footer ---------- */
+.bye {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  min-height: 60vh;
+  padding: 60px 20px;
+  background: linear-gradient(160deg, #000 0%, #04191b 55%, #0a3a3d 100%);
+}
+
+.bye-content {
+  position: relative;
+  z-index: 1;
+}
+
+.bye-content p {
+  margin: 12px 0 22px;
+  opacity: 0.8;
+}
+
+.bye-content small {
+  display: block;
+  margin-top: 28px;
+  opacity: 0.5;
+}
+
+.bye-btn {
+  display: inline-block;
+  padding: 12px 32px;
+  border-radius: 999px;
+  background: #d89a6a;
+  color: #111;
+  font-weight: bold;
+  text-decoration: none;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.bye-btn:hover,
+.bye-btn:focus-visible {
+  background: #fff;
+  transform: translateY(-2px);
+  outline: none;
+}
+
+/* the colour panels: hidden unless JavaScript arms them */
+.bye-panels { display: none; }
+
+.bye.armed .bye-panels { display: block; }
+
+.bye-panels div {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.bye-panels div:nth-child(1) { background: #c04912; }
+.bye-panels div:nth-child(2) { background: #78818a; }
+.bye-panels div:nth-child(3) { background: #9f1019; }
+.bye-panels div:nth-child(4) { background: #0b5a2e; }
+
+/* same exit as the intro (fw-out already exists in your file) */
+.bye.in .bye-panels div:nth-child(4) { animation: fw-out 0.9s ease-in 0.4s both; }
+.bye.in .bye-panels div:nth-child(3) { animation: fw-out 0.9s ease-in 0.7s both; }
+.bye.in .bye-panels div:nth-child(2) { animation: fw-out 0.9s ease-in 1s   both; }
+.bye.in .bye-panels div:nth-child(1) { animation: fw-out 0.9s ease-in 1.3s both; }
+.bye { min-height: 44vh; }
+
+.bye-content .st-script { margin-bottom: 14px; }
+
+.bye-content p { margin-top: 18px; }
